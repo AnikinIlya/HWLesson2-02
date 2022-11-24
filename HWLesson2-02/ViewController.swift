@@ -7,42 +7,58 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+enum CurrentLight {
+    case red, yellow, green
+}
 
+class ViewController: UIViewController {
+    
+// MARK: - IB Outlets
     @IBOutlet var redLightLabel: UIView!
     @IBOutlet var yellowLightLabel: UIView!
     @IBOutlet var greenLightLabel: UIView!
-    @IBOutlet var changeLightsButton: UIButton!
-    var lightLit = "red"
     
+    @IBOutlet var changeLightsButton: UIButton!
+    
+// MARK: - Private Properties
+    private let lightIsOn: CGFloat = 1
+    private let lightIsOff: CGFloat = 0.3
+    private var lightLit = CurrentLight.red
+    
+// MARK: - Override Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        redLightLabel.alpha = 0.3
-        yellowLightLabel.alpha = 0.3
-        greenLightLabel.alpha = 0.3
         
+        changeLightsButton.layer.cornerRadius = 15
+        
+        redLightLabel.alpha = lightIsOff
+        yellowLightLabel.alpha = lightIsOff
+        greenLightLabel.alpha = lightIsOff
+    }
+    
+    override func viewWillLayoutSubviews() {
         redLightLabel.layer.cornerRadius = redLightLabel.frame.width/2
         yellowLightLabel.layer.cornerRadius = yellowLightLabel.frame.width/2
         greenLightLabel.layer.cornerRadius = greenLightLabel.frame.width/2
     }
 
+// MARK: - IB Actions
     @IBAction func changeLightsButtonPressed() {
-        
         changeLightsButton.setTitle("NEXT", for: .normal)
         
         switch lightLit {
-        case "red":
-            redLightLabel.alpha = 1
-            greenLightLabel.alpha = 0.3
-            lightLit = "yellow"
-        case "yellow":
-            yellowLightLabel.alpha = 1
-            redLightLabel.alpha = 0.3
-            lightLit = "green"
-        default:
-            greenLightLabel.alpha = 1
-            yellowLightLabel.alpha = 0.3
-            lightLit = "red"
+        case .red:
+            redLightLabel.alpha = lightIsOn
+            greenLightLabel.alpha = lightIsOff
+            lightLit = .yellow
+        case .yellow:
+            yellowLightLabel.alpha = lightIsOn
+            redLightLabel.alpha = lightIsOff
+            lightLit = .green
+        case .green:
+            greenLightLabel.alpha = lightIsOn
+            yellowLightLabel.alpha = lightIsOff
+            lightLit = .red
         }
     }
     
